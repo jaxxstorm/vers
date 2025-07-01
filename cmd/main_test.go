@@ -93,7 +93,7 @@ func TestCLIShowVersion(t *testing.T) {
 	// Since showVersion now calculates git version, we expect a version number
 	// It should be in the format like "0.0.3" or "0.0.0-dev" (fallback)
 	require.True(t, outputStr != "", "Expected some version output")
-	require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"), 
+	require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"),
 		"Expected version to contain '0.0' or 'dev', got: %s", outputStr)
 }
 
@@ -244,10 +244,10 @@ func TestCLIRun(t *testing.T) {
 
 		output, _ := ioutil.ReadAll(r)
 		outputStr := strings.TrimSpace(string(output))
-		
+
 		// Since showVersion now calculates git version, we expect a version number
 		require.True(t, outputStr != "", "Expected some version output")
-		require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"), 
+		require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"),
 			"Expected version to contain '0.0' or 'dev', got: %s", outputStr)
 	})
 
