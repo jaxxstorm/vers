@@ -66,17 +66,8 @@ func (c *CLI) Run() error {
 }
 
 func (c *CLI) showVersion() error {
-	versionInfo := map[string]string{
-		"version": Version,
-		"name":    "vers",
-	}
-
-	if c.JSON {
-		return json.NewEncoder(os.Stdout).Encode(versionInfo)
-	}
-
-	fmt.Printf("vers %s\n", Version)
-	return nil
+	// Calculate version from git repository instead of showing binary version
+	return c.calculateVersion()
 }
 
 func (c *CLI) convertVersion() error {
