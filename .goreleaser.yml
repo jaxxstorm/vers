@@ -43,7 +43,7 @@ brews:
     repository:
       owner: jaxxstorm
       name: homebrew-tap
-    commit_author:
+      token: "{{ .Env.HOMEBREW_TOKEN }}"
       name: GitHub Actions
       email: bot@leebriggs.co.uk
     directory: Formula

@@ -19,7 +19,7 @@ func main() {
 
 	for _, version := range examples {
 		fmt.Printf("Converting version: %s\n", version)
-		
+
 		versions, err := vers.CalculateFromString(version)
 		if err != nil {
 			log.Printf("Error converting %s: %v", version, err)
