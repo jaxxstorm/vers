@@ -25,7 +25,7 @@ func TestIsVersionString(t *testing.T) {
 		{"feature/branch", false},
 		{"abc123def", false},
 		{"", false},
-		{"1.2", false}, // Not enough parts
+		{"1.2", true}, // x.y format is valid
 		{"v", false},
 		{"1", false},
 	}
@@ -88,10 +88,13 @@ func TestCLIShowVersion(t *testing.T) {
 	os.Stdout = oldStdout
 
 	output, _ := ioutil.ReadAll(r)
-	outputStr := string(output)
+	outputStr := strings.TrimSpace(string(output))
 
-	require.Contains(t, outputStr, "vers version")
-	require.Contains(t, outputStr, "dev") // Default version should be "dev"
+	// Since showVersion now calculates git version, we expect a version number
+	// It should be in the format like "0.0.3" or "0.0.0-dev" (fallback)
+	require.True(t, outputStr != "", "Expected some version output")
+	require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"), 
+		"Expected version to contain '0.0' or 'dev', got: %s", outputStr)
 }
 
 func TestCLIShowVersionJSON(t *testing.T) {
@@ -110,12 +113,13 @@ func TestCLIShowVersionJSON(t *testing.T) {
 
 	output, _ := ioutil.ReadAll(r)
 
-	var versionInfo map[string]string
-	err = json.Unmarshal(output, &versionInfo)
+	// Since showVersion now calculates git version, it outputs a version object in JSON
+	var versions vers.LanguageVersions
+	err = json.Unmarshal(output, &versions)
 	require.NoError(t, err)
 
-	require.Equal(t, "dev", versionInfo["version"])
-	require.Equal(t, "vers", versionInfo["name"])
+	// Check that we got some version data
+	require.NotEmpty(t, versions.SemVer, "Expected SemVer field to be populated")
 }
 
 func TestCLIConvertVersion(t *testing.T) {
@@ -239,7 +243,12 @@ func TestCLIRun(t *testing.T) {
 		os.Stdout = oldStdout
 
 		output, _ := ioutil.ReadAll(r)
-		require.Contains(t, string(output), "vers version")
+		outputStr := strings.TrimSpace(string(output))
+		
+		// Since showVersion now calculates git version, we expect a version number
+		require.True(t, outputStr != "", "Expected some version output")
+		require.True(t, strings.Contains(outputStr, "0.0") || strings.Contains(outputStr, "dev"), 
+			"Expected version to contain '0.0' or 'dev', got: %s", outputStr)
 	})
 
 	t.Run("Convert version", func(t *testing.T) {
