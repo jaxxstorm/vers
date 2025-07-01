@@ -118,7 +118,7 @@ func (c *CLI) calculateVersion() error {
 
 	// Validate commitish against actual git repository
 	if c.Commitish != "" && !isValidCommitishInRepo(repo, c.Commitish) {
-		fmt.Fprintf(os.Stderr, "WARN: '%s' does not exist in this git repository (not a valid branch, tag, or commit)\n", c.Commitish)
+		return fmt.Errorf("'%s' does not exist in this git repository (not a valid branch, tag, or commit)", c.Commitish)
 	}
 
 	opts := vers.Options{
