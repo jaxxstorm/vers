@@ -64,36 +64,6 @@ jobs:
       with:
         go-version: '1.23.x'
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goos: [linux, windows, darwin]
-        goarch: [amd64, arm64]
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.23.x'
-
-    - name: Build binary
-      env:
-        GOOS: ${{ matrix.goos }}
-        GOARCH: ${{ matrix.goarch }}
-      run: |
-        go build -ldflags="-s -w -X main.Version=dev" -o dist/vers-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.goos == 'windows' && '.exe' || '' }} ./cmd
-
-    - name: Test binary
-      if: matrix.goos == 'linux' && matrix.goarch == 'amd64'
-      run: |
-        ./dist/vers-linux-amd64 --version
-        ./dist/vers-linux-amd64 --help
-
   validate:
     name: Validate
     runs-on: ubuntu-latest
