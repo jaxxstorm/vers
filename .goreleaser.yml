@@ -1,0 +1,51 @@
+version: 2
+
+project_name: vers
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: vers
+    main: ./cmd
+    binary: vers
+    goos:
+      - darwin
+      - windows
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - "-X main.Version={{.Version}}"
+      - "-s -w"
+
+archives:
+  - id: vers
+    format: tar.gz
+    builds:
+      - vers
+    name_template: "{{ .ProjectName }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+brews:
+  - name: vers
+    repository:
+      owner: jaxxstorm
+      name: homebrew-tap
+    commit_author:
+      name: GitHub Actions
+      email: bot@leebriggs.co.uk
+    directory: Formula
+    homepage: "https://leebriggs.co.uk"
+    description: "Calculate versions from Git repositories."
