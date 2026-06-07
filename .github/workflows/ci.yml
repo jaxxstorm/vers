@@ -36,7 +36,7 @@ jobs:
       run: go test -v -race -coverprofile=coverage-${{ matrix.go-version }}.out ./...
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v7
       with:
         file: ./coverage-${{ matrix.go-version }}.out
         fail_ci_if_error: false
