@@ -3,7 +3,7 @@ module github.com/jaxxstorm/vers
 go 1.23.2
 
 require (
-	github.com/alecthomas/kong v1.12.0
+	github.com/alecthomas/kong v1.16.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/go-git/go-billy/v5 v5.6.2
 	github.com/go-git/go-git/v5 v5.16.2
